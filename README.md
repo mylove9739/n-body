@@ -1,3 +1,3 @@
 # n-body
 
-n-body demotration  using C standard
+n-body demotration  using C standard and MPI library
