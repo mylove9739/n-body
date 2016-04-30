@@ -50,7 +50,7 @@ typedef struct __body {
 //init bodies array with the MAX_BODY constant
 body list_body[MAX_BODY];\
 //cached global body
-body previous_body;
+body  previous_body;
 
 // output all body infomation to console
 void body_info(body b) {
@@ -214,12 +214,12 @@ int master_io(MPI_Comm master_comm, MPI_Comm comm )
 //        }
 //    }
 
-    body send;
-    send.force_x = 999;
-    send.force_y = 777;
+//    body send;
+//    send.force_x = 999;
+//    send.force_y = 777;
 
-    const int dest = 1;
-    MPI_Send(&send,   1, mpi_body_type, dest, tag, MPI_COMM_WORLD);
+//    const int dest = 1;
+//    MPI_Send(&send,   1, mpi_body_type, dest, tag, MPI_COMM_WORLD);
 }
 
 /* This is the slave */
@@ -235,15 +235,20 @@ int slave_io(MPI_Comm master_comm, MPI_Comm comm )
 
 //    sprintf( buf, "Goodbye from slave %d\n", rank );
 //    MPI_Send( buf, strlen(buf) + 1, MPI_CHAR, 0, 0, master_comm );
-    MPI_Status status;
-    const int src = 0;
+//    MPI_Status status;
+//    const int src = 0;
 
-    body recv;
+//    body *recv;
 
-    MPI_Recv(&recv,   1, mpi_body_type, src, tag, MPI_COMM_WORLD, &status);
-    printf("Rank %d: Received: body force x = %f force y = %f\n", rank,
-           recv.force_x, recv.force_y);
-    return 0;
+//    MPI_Recv(&recv,   1, mpi_body_type, src, tag, MPI_COMM_WORLD, &status);
+//    printf("Rank %d: Received: body force x = %f force y = %f\n", rank,
+//           recv.force_x, recv.force_y);
+//    if (previous_body) {
+//        update_body_force(&recv, &previous_body);
+//        update_body_velocity(&recv);
+//        update_body_location(&recv);
+//    }
+//    return 0;
 }
 
 int main(int   argc,    char *argv[]) {
@@ -295,10 +300,31 @@ int main(int   argc,    char *argv[]) {
 
     //
     MPI_Comm_split( MPI_COMM_WORLD, rank == 0, 0, &new_comm );
+
+    // master run
     if (rank == 0) {
-        master_io( MPI_COMM_WORLD, new_comm );
-    } else {
-        slave_io( MPI_COMM_WORLD, new_comm );
+        body send;
+        send.force_x = 999;
+        send.force_y = 777;
+
+        const int dest = 1;
+        MPI_Send(&send,   1, mpi_body_type, dest, tag, MPI_COMM_WORLD);
+    }
+    // slave
+    else {
+        MPI_Status status;
+        const int src = 0;
+
+        body  recv;
+
+        MPI_Recv(&recv,   1, mpi_body_type, src, tag, MPI_COMM_WORLD, &status);
+        printf("Rank %d: Received: body force x = %f force y = %f\n", rank,
+               recv.force_x, recv.force_y);
+        if (&previous_body) {
+            update_body_force(&recv, &previous_body);
+            update_body_velocity(&recv);
+            update_body_location(&recv);
+        }
     }
 
 
