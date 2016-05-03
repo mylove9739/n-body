@@ -176,8 +176,8 @@ void update_body_velocity(body *b) {
 // for MPI
 void update_body_location(body *b) {
 
-        b->position_x -= TIME_STEP * b->velocity_x;
-        b->position_y -= TIME_STEP * b->velocity_y;
+    b->position_x -= TIME_STEP * b->velocity_x;
+    b->position_y -= TIME_STEP * b->velocity_y;
 
 }
 
@@ -192,8 +192,8 @@ void update_body_location(body *b) {
 //}
 // for MPI
 void reset_body_force(body *b) {
-        b->force_x = 0;
-        b->force_y = 0;
+    b->force_x = 0;
+    b->force_y = 0;
 }
 
 
@@ -203,84 +203,82 @@ void reset_body_force(body *b) {
 int master_io(MPI_Comm master_comm, MPI_Comm comm )
 
 {
-//    int        i,j, size;
-//    char       buf[256];
-//    MPI_Status status;
-//    MPI_Comm_size( master_comm, &size );
-//    for (j=1; j<=2; j++) {
-//        for (i=1; i<size; i++) {
-//            MPI_Recv( buf, 256, MPI_CHAR, i, 0, master_comm, &status );
-//            fputs( buf, stdout );
-//        }
-//    }
+    //    int        i,j, size;
+    //    char       buf[256];
+    //    MPI_Status status;
+    //    MPI_Comm_size( master_comm, &size );
+    //    for (j=1; j<=2; j++) {
+    //        for (i=1; i<size; i++) {
+    //            MPI_Recv( buf, 256, MPI_CHAR, i, 0, master_comm, &status );
+    //            fputs( buf, stdout );
+    //        }
+    //    }
 
-//    body send;
-//    send.force_x = 999;
-//    send.force_y = 777;
+    //    body send;
+    //    send.force_x = 999;
+    //    send.force_y = 777;
 
-//    const int dest = 1;
-//    MPI_Send(&send,   1, mpi_body_type, dest, tag, MPI_COMM_WORLD);
+    //    const int dest = 1;
+    //    MPI_Send(&send,   1, mpi_body_type, dest, tag, MPI_COMM_WORLD);
 }
 
 /* This is the slave */
 int slave_io(MPI_Comm master_comm, MPI_Comm comm )
 
 {
-//    char buf[256];
-//    int  rank;
+    //    char buf[256];
+    //    int  rank;
 
-//    MPI_Comm_rank( comm, &rank );
-//    sprintf( buf, "Hello from slave %d\n", rank );
-//    MPI_Send( buf, strlen(buf) + 1, MPI_CHAR, 0, 0, master_comm );
+    //    MPI_Comm_rank( comm, &rank );
+    //    sprintf( buf, "Hello from slave %d\n", rank );
+    //    MPI_Send( buf, strlen(buf) + 1, MPI_CHAR, 0, 0, master_comm );
 
-//    sprintf( buf, "Goodbye from slave %d\n", rank );
-//    MPI_Send( buf, strlen(buf) + 1, MPI_CHAR, 0, 0, master_comm );
-//    MPI_Status status;
-//    const int src = 0;
+    //    sprintf( buf, "Goodbye from slave %d\n", rank );
+    //    MPI_Send( buf, strlen(buf) + 1, MPI_CHAR, 0, 0, master_comm );
+    //    MPI_Status status;
+    //    const int src = 0;
 
-//    body *recv;
+    //    body *recv;
 
-//    MPI_Recv(&recv,   1, mpi_body_type, src, tag, MPI_COMM_WORLD, &status);
-//    printf("Rank %d: Received: body force x = %f force y = %f\n", rank,
-//           recv.force_x, recv.force_y);
-//    if (previous_body) {
-//        update_body_force(&recv, &previous_body);
-//        update_body_velocity(&recv);
-//        update_body_location(&recv);
-//    }
-//    return 0;
+    //    MPI_Recv(&recv,   1, mpi_body_type, src, tag, MPI_COMM_WORLD, &status);
+    //    printf("Rank %d: Received: body force x = %f force y = %f\n", rank,
+    //           recv.force_x, recv.force_y);
+    //    if (previous_body) {
+    //        update_body_force(&recv, &previous_body);
+    //        update_body_velocity(&recv);
+    //        update_body_location(&recv);
+    //    }
+    //    return 0;
 }
 
 int main(int   argc,    char *argv[]) {
 
-//    int j = 0;
-//    int  step_of_move = 100;
-//    for (j = 0; j < step_of_move; j++) {
-//        //update data!
-//        update_list_body_force();
-//        update_list_body_velocity();
-//        update_list_body_location();
+    //    int j = 0;
+    //    int  step_of_move = 100;
+    //    for (j = 0; j < step_of_move; j++) {
+    //        //update data!
+    //        update_list_body_force();
+    //        update_list_body_velocity();
+    //        update_list_body_location();
 
 
-//        //reset force for each update step
-//        reset_list_body_force();
-//    }
+    //        //reset force for each update step
+    //        reset_list_body_force();
+    //    }
 
 
-    int rank, size;
-    const int tag = 13;
-    MPI_Comm new_comm;
-
+    int rank;
+    int size;
 
     MPI_Init (&argc, &argv);      /* starts MPI */
-    MPI_Comm_rank (MPI_COMM_WORLD, &rank);        /* get current process id */
-    MPI_Comm_size (MPI_COMM_WORLD, &size);        /* get number of processes */
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);        /* get current process id */
+    MPI_Comm_size(MPI_COMM_WORLD, &size);        /* get number of processes */
 
     //printf( "Hello world from process %d of %d\n", rank, size );
 
     // I follow this topic
     // http://stackoverflow.com/questions/9864510/struct-serialization-in-c-and-transfer-over-mpi
-
+    // to tranfer truct data type over mpi
     const int       num_of_item = 7;
     int             blocklengths[7] = {1, 1, 1, 1, 1, 1, 1};
     MPI_Datatype    types[7] = {MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE, MPI_DOUBLE};
@@ -298,57 +296,63 @@ int main(int   argc,    char *argv[]) {
     MPI_Type_create_struct(num_of_item, blocklengths, offsets, types, &mpi_body_type);
     MPI_Type_commit(&mpi_body_type);
 
-    //
-    MPI_Comm_split( MPI_COMM_WORLD, rank == 0, 0, &new_comm );
+    // and here
+    // http://stackoverflow.com/questions/11246150/synchronizing-master-slave-model-with-mpi
+    // for master/slave
+    int j = 0;
+    int i = 0;
+    int  step_of_move = 2;
+    int data = 0;
+    for (j = 0; j < step_of_move; j++) {
 
-    // master run
-    if (rank == 0) {
-        body send;
-        send.force_x = 999;
-        send.force_y = 777;
 
-        const int dest = 1;
-        MPI_Send(&send,   1, mpi_body_type, dest, tag, MPI_COMM_WORLD);
-    }
-    // slave
-    else {
-        MPI_Status status;
-        const int src = 0;
 
-        body  recv;
+        if(rank == 0) { //master
 
-        MPI_Recv(&recv,   1, mpi_body_type, src, tag, MPI_COMM_WORLD, &status);
-        printf("Rank %d: Received: body force x = %f force y = %f\n", rank,
-               recv.force_x, recv.force_y);
-        if (&previous_body) {
-            update_body_force(&recv, &previous_body);
-            update_body_velocity(&recv);
-            update_body_location(&recv);
+            int Rstate = 0;
+            int Sstate = 0;
+            int p;
+
+            for(p = 1; p < size; p++){
+
+                body b =  list_body[i];
+                MPI_Send(&b, 1, mpi_body_type, p, 20, MPI_COMM_WORLD);
+                //fflush(stdout);
+                //printf("master : order P%d to start reading\n",p);
+                body b_recv;
+                MPI_Recv(&b_recv, 1, mpi_body_type, p, 21, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                //fflush(stdout);
+                //printf("master : P%d finished reading\n\n",p);
+                printf("body[%d]: verlocity %f\n", i, b_recv.velocity_x);
+                i++;
+
+            }
+
         }
+        else { //workers
+
+            body  b;
+            MPI_Recv(&b, 1, mpi_body_type, 0, 20, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            //printf("worker %d start processing\n", rank);
+
+            //read here
+            //sleep(1000);
+
+            //send to master : finish reading
+            b.velocity_x = 99999;
+            MPI_Send(&b, 1, mpi_body_type, 0, 21, MPI_COMM_WORLD);
+
+            //processing
+            //sleep(3000);
+            //fflush(stdout);
+
+
+        }
+
     }
 
 
-//    if (rank == 0) {
-//        body send;
-//        send.force_x = 999;
-//        send.force_y = 777;
-
-//        const int dest = 1;
-//        MPI_Send(&send,   1, mpi_body_type, dest, tag, MPI_COMM_WORLD);
-
-//        printf("Rank %d: sent structure car\n", rank);
-//    }
-//    if (rank == 1) {
-//        MPI_Status status;
-//        const int src = 0;
-
-//        body recv;
-
-//        MPI_Recv(&recv,   1, mpi_body_type, src, tag, MPI_COMM_WORLD, &status);
-//        printf("Rank %d: Received: body force x = %f force y = %f\n", rank,
-//               recv.force_x, recv.force_y);
-//    }
+    //printf("Data: %d\n", data);
     MPI_Finalize();
-
-    //return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
